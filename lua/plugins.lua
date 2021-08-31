@@ -1,5 +1,5 @@
 return require('packer').startup(function()
-    use "savq/paq-nvim"
+    use 'wbthomason/packer.nvim'
 
     use "tpope/vim-fugitive"
     use "kien/ctrlp.vim"
@@ -10,7 +10,13 @@ return require('packer').startup(function()
     use "tomtom/tcomment_vim"
     use "machakann/vim-highlightedyank"
 
-    use {"sonph/onehalf", rtp="vim"}
+    use {"sonph/onehalf",
+        rtp="vim",
+        config = function() vim.cmd("colorscheme onehalfdark") end,
+    }
 
-
+    use 'nvim-treesitter/nvim-treesitter'
+    -- Like context.vim, displays class/function/block context
+    -- at the top of the screen while scrolling through code.
+    use 'romgrk/nvim-treesitter-context'
 end)
