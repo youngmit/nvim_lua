@@ -9,8 +9,14 @@ return require('packer').startup(function()
     use "airblade/vim-gitgutter"
     use "tomtom/tcomment_vim"
     use "machakann/vim-highlightedyank"
+    use "preservim/tagbar"
+    use {
+        "psf/black",
+        branch = "stable",
+    }
 
-    use {"sonph/onehalf",
+    use {
+        "sonph/onehalf",
         rtp="vim",
         config = function() vim.cmd("colorscheme onehalfdark") end,
     }
@@ -19,4 +25,9 @@ return require('packer').startup(function()
     -- Like context.vim, displays class/function/block context
     -- at the top of the screen while scrolling through code.
     use 'romgrk/nvim-treesitter-context'
+
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = { {'nvim-lua/plenary.nvim'} }
+    }
 end)

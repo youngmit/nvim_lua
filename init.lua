@@ -19,8 +19,12 @@ o.shiftwidth = 4
 o.autoindent = true
 o.textwidth = 80
 o.hlsearch = true
+o.grepprg = "git grep -n $*"
 
 vim.api.nvim_set_keymap("n", "<F2>", ":NERDTreeToggle<CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<F8>", ":TagbarToggle<CR>", {noremap = true})
+
+vim.cmd('au BufNewFile,BufRead *Jenkinsfile* setf groovy')
 
 require('plugins')
 
@@ -30,6 +34,9 @@ require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
+    },
+    indent = {
+        enable = false,
     },
 }
 
