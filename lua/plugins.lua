@@ -9,6 +9,7 @@ return require('packer').startup(function()
     use "airblade/vim-gitgutter"
     use "tomtom/tcomment_vim"
     use "machakann/vim-highlightedyank"
+    use "ntpeters/vim-better-whitespace"
     use "preservim/tagbar"
     use {
         "psf/black",
