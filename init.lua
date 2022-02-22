@@ -20,9 +20,11 @@ o.autoindent = true
 o.textwidth = 80
 o.hlsearch = true
 o.grepprg = "git grep -n $*"
+o.diffopt = "filler,vertical"
 
 vim.api.nvim_set_keymap("n", "<F2>", ":NERDTreeToggle<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<F8>", ":TagbarToggle<CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<Leader>fa", ":grep! \"\\b<C-R><C-W>\\b\"<CR>:copen<CR>", {noremap = true})
 
 vim.cmd('au BufNewFile,BufRead *Jenkinsfile* setf groovy')
 

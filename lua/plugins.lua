@@ -10,6 +10,8 @@ return require('packer').startup(function()
     use "tomtom/tcomment_vim"
     use "machakann/vim-highlightedyank"
     use "preservim/tagbar"
+
+    use "rhysd/vim-clang-format"
     use {
         "psf/black",
         branch = "stable",
