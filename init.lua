@@ -48,3 +48,5 @@ require'treesitter-context'.setup{
     enable = true,
     throttle = true,
 }
+
+vim.api.nvim_command('autocmd FileType qf wincmd J')
