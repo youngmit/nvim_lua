@@ -34,7 +34,6 @@ vim.cmd('au BufNewFile,BufRead *Jenkinsfile* setf groovy')
 require('plugins')
 
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
     highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,

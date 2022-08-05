@@ -33,4 +33,7 @@ return require('packer').startup(function()
         'nvim-telescope/telescope.nvim',
         requires = { {'nvim-lua/plenary.nvim'} }
     }
+
+    use 'puremourning/vimspector'
+    use 'sakhnik/nvim-gdb'
 end)
