@@ -11,6 +11,7 @@ return require('packer').startup(function()
     use "machakann/vim-highlightedyank"
     use "ntpeters/vim-better-whitespace"
     use "preservim/tagbar"
+    use "Glench/Vim-Jinja2-Syntax"
 
     use "rhysd/vim-clang-format"
     use {
@@ -36,4 +37,5 @@ return require('packer').startup(function()
 
     use 'puremourning/vimspector'
     use 'sakhnik/nvim-gdb'
+    use 'neovim/nvim-lspconfig'
 end)

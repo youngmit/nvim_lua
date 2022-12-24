@@ -29,7 +29,7 @@ vim.api.nvim_set_keymap("n", "<Leader>fa", ":grep! \"\\b<C-R><C-W>\\b\"<CR>:cope
 vim.api.nvim_set_keymap("n", "<Leader>nn", ":cnext<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<Leader>nN", ":cprev<CR>", {noremap = true})
 
-vim.cmd('au BufNewFile,BufRead *Jenkinsfile* setf groovy')
+vim.cmd("au BufNewFile,BufRead *Jenkinsfile* setf groovy")
 
 require('plugins')
 
@@ -49,3 +49,33 @@ require'treesitter-context'.setup{
 }
 
 vim.api.nvim_command('autocmd FileType qf wincmd J')
+
+
+--- Language server config
+local opts = { noremap=true, silent=true }
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+
+local on_lsp_attach = function(client, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    local bufopts = { noremap=true, silent=true, buffer=bufnr}
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.declaration, bufopts)
+end
+
+local lsp_flags = {
+    debounce_text_changes = 150,
+}
+
+require'lspconfig'.clangd.setup{
+    on_attach = on_lsp_attach,
+    flags = lsp_flags,
+    --- disable proto, because clangd suxxxxx at it
+    filetypes = {"c", "cpp", "objc", "objcpp", "cuda"},
+}
+require'lspconfig'.pyright.setup{
+    on_attach = on_lsp_attach,
+    flags = lsp_flags,
+}
