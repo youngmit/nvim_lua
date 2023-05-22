@@ -3,7 +3,7 @@ local bo = vim.bo
 local wo = vim.wo
 
 
-wo.colorcolumn = "80"
+wo.colorcolumn = "88"
 wo.number = true
 wo.relativenumber = true
 wo.cursorline = true
@@ -17,13 +17,22 @@ o.tabstop = 4
 o.softtabstop = 4
 o.shiftwidth = 4
 o.autoindent = true
-o.textwidth = 80
+o.textwidth = 88
 o.hlsearch = true
 o.grepprg = "git grep -n --recurse-submodules $*"
 o.diffopt = "filler,vertical"
 
+vim.g.airline_powerline_fonts = 1
+
+local ts_builtin = require('telescope.builtin')
+
+vim.g.mapleader = ' '
+
 vim.api.nvim_set_keymap("n", "<F2>", ":NERDTreeToggle<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<F8>", ":TagbarToggle<CR>", {noremap = true})
+vim.keymap.set("n", "<Leader>gf", ts_builtin.find_files, {noremap = true})
+vim.keymap.set("n", "<Leader>gr", ts_builtin.lsp_references, {noremap = true})
+
 
 vim.api.nvim_set_keymap("n", "<Leader>fa", ":grep! \"\\b<C-R><C-W>\\b\"<CR>:copen<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<Leader>nn", ":cnext<CR>", {noremap = true})
@@ -50,6 +59,8 @@ require'treesitter-context'.setup{
 
 vim.api.nvim_command('autocmd FileType qf wincmd J')
 
+vim.api.nvim_command('autocmd FileType c,cpp ClangFormatAutoEnable')
+
 
 --- Language server config
 local opts = { noremap=true, silent=true }
@@ -62,7 +73,7 @@ local on_lsp_attach = function(client, bufnr)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.rename, bufopts)
 end
 
 local lsp_flags = {
@@ -79,3 +90,6 @@ require'lspconfig'.pyright.setup{
     on_attach = on_lsp_attach,
     flags = lsp_flags,
 }
+
+
+
