@@ -11,9 +11,12 @@ return require('packer').startup(function()
     use "tomtom/tcomment_vim"
     use "machakann/vim-highlightedyank"
     use "ntpeters/vim-better-whitespace"
+    use "johnfrankmorgan/whitespace.nvim"
     use "preservim/tagbar"
     use "Glench/Vim-Jinja2-Syntax"
-    use "johnfrankmorgan/whitespace.nvim"
+
+    -- copying over SSH
+    use "ojroques/nvim-osc52"
 
     use "rhysd/vim-clang-format"
     use {
