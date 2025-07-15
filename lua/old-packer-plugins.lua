@@ -17,8 +17,7 @@ return require('packer').startup(function()
     use "dhruvasagar/vim-table-mode"
 
 
-    -- copying over SSH
-    use "ojroques/nvim-osc52"
+    use "shaunsingh/solarized.nvim"
 
     use "rhysd/vim-clang-format"
     use {
