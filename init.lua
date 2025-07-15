@@ -58,9 +58,10 @@ require'treesitter-context'.setup{
 }
 
 vim.api.nvim_command('autocmd FileType qf wincmd J')
+vim.api.nvim_command('autocmd FileType gitcommit setlocal spell')
 
 vim.api.nvim_command('autocmd FileType c,cpp ClangFormatAutoEnable')
-vim.api.nvim_command('autocmd BufWritePre *.py silent! execute \':Black\'')
+-- vim.api.nvim_command('autocmd BufWritePre *.py silent! execute \':Black\'')
 
 
 --- Language server config
@@ -83,12 +84,15 @@ local lsp_flags = {
     debounce_text_changes = 150,
 }
 
+local nvim_lsp = require'lspconfig'
+-- /workplace/mthyoung/selfie-cam-lru/tmp/KuiperEAR-lep-release-2.23613.0/lep-sdk/sysroots/x86_64-lep-linux/usr/bin/aarch64-lep-linux/aarch64-lep-linux-g++
 require'lspconfig'.clangd.setup{
-    cmd = {"clangd", "--background-index", "--compile-commands-dir=build"},
+    cmd = {"brazil-runtime-exec", "x86_64-unknown-linux-gnu-clangd", "--log=verbose", "--background-index", "--query-driver=/workplace/mthyoung/**/*-linux-*"},
     on_attach = on_lsp_attach,
     flags = lsp_flags,
     --- disable proto, because clangd suxxxxx at it
-    filetypes = {"c", "cpp", "objc", "objcpp", "cuda"},
+    filetypes = {"c",  "cc", "cpp", "objc", "objcpp", "cuda"},
+    root_dir = nvim_lsp.util.root_pattern('Config'),
 }
 
 require'lspconfig'.pyright.setup{
@@ -116,5 +120,14 @@ vim.keymap.set("n", "<leader>fs", ts_builtin.lsp_document_symbols, { noremap = t
 vim.keymap.set("n", "<leader>fd", ts_builtin.lsp_definitions, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ft", ts_builtin.treesitter, { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>c", require('osc52').copy_operator, {expr = true})
-vim.keymap.set("v", "<leader>c", require('osc52').copy_visual)
+vim.g.clipboard = {
+      name = 'OSC 52',
+      copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+      },
+      paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+      },
+    }

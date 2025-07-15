@@ -15,8 +15,7 @@ return require('packer').startup(function()
     use "preservim/tagbar"
     use "Glench/Vim-Jinja2-Syntax"
 
-    -- copying over SSH
-    use "ojroques/nvim-osc52"
+    use "shaunsingh/solarized.nvim"
 
     use "rhysd/vim-clang-format"
     use {
