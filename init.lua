@@ -40,7 +40,7 @@ vim.cmd("au BufNewFile,BufRead *Jenkinsfile* setf groovy")
 
 vim.fn.setenv("MYVIMPLUGINS", "~/.config/nvim/lua/plugins.lua")
 
-require('plugins')
+require("config.lazy")
 
 require'nvim-treesitter.configs'.setup {
     highlight = {

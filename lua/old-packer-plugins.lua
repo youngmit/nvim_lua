@@ -14,6 +14,8 @@ return require('packer').startup(function()
     use "johnfrankmorgan/whitespace.nvim"
     use "preservim/tagbar"
     use "Glench/Vim-Jinja2-Syntax"
+    use "dhruvasagar/vim-table-mode"
+
 
     -- copying over SSH
     use "ojroques/nvim-osc52"
