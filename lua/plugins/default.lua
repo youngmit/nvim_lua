@@ -5,7 +5,6 @@ return {
     { "vim-airline/vim-airline" },
     { "vim-airline/vim-airline-themes" },
     { "airblade/vim-gitgutter" },
-    { "ojroques/nvim-osc52" },
     { "machakann/vim-highlightedyank" },
     { "preservim/tagbar" },
     { 
@@ -16,8 +15,18 @@ return {
         end,
     },
     -- Analysis/Navigation
-    { "nvim-treesitter/nvim-treesitter" },
-    { "romgrk/nvim-treesitter-context" },
+    { 
+        "nvim-treesitter/nvim-treesitter",
+        config = function () 
+          local configs = require("nvim-treesitter.configs")
+          configs.setup({
+            ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "yaml", "python"},
+            sync_install = false,
+            highlight = { enable = true },
+            indent = { enable = true },  
+          })
+        end
+    },
     { "neovim/nvim-lspconfig" },
     { 
         "nvim-telescope/telescope.nvim",

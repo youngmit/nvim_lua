@@ -38,8 +38,6 @@ vim.api.nvim_set_keymap("n", "<Leader>nN", ":cprev<CR>", {noremap = true})
 
 vim.cmd("au BufNewFile,BufRead *Jenkinsfile* setf groovy")
 
-vim.fn.setenv("MYVIMPLUGINS", "~/.config/nvim/lua/plugins.lua")
-
 require("config.lazy")
 
 require'nvim-treesitter.configs'.setup {
@@ -52,15 +50,10 @@ require'nvim-treesitter.configs'.setup {
     },
 }
 
-require'treesitter-context'.setup{
-    enable = true,
-    throttle = true,
-}
-
 vim.api.nvim_command('autocmd FileType qf wincmd J')
 vim.api.nvim_command('autocmd FileType gitcommit setlocal spell')
 
-vim.api.nvim_command('autocmd FileType c,cpp ClangFormatAutoEnable')
+-- vim.api.nvim_command('autocmd FileType c,cpp ClangFormatAutoEnable')
 -- vim.api.nvim_command('autocmd BufWritePre *.py silent! execute \':Black\'')
 
 
@@ -77,7 +70,20 @@ local on_lsp_attach = function(client, bufnr)
     vim.keymap.set('n', '<Leader>gt', vim.lsp.buf.type_definition, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', 'fm', vim.lsp.buf.format, bufopts)
     vim.keymap.set('n', 'J', vim.lsp.buf.completion, bufopts)
+    vim.keymap.set('n', '<leader>w', function()
+
+    local params = vim.lsp.util.make_formatting_params({})
+    local handler = function(err, result)
+      if not result then return end
+
+      vim.lsp.util.apply_text_edits(result, bufnr, client.offset_encoding)
+      vim.cmd('write')
+    end
+
+    client.request('textDocument/formatting', params, handler, bufnr)
+  end, {buffer = bufnr})
 end
 
 local lsp_flags = {
@@ -109,7 +115,7 @@ require('telescope').setup{
 
 -- Telescope finder bindings
 local ts_builtin = require('telescope.builtin')
-vim.keymap.set("n", "<Leader>ff", ts_builtin.git_files, {noremap = true})
+vim.keymap.set("n", "<Leader>lf", ts_builtin.git_files, {noremap = true})
 vim.keymap.set("n", "<Leader>fz", ts_builtin.spell_suggest, {noremap = true})
 vim.keymap.set("n", "<Leader>fb", ts_builtin.buffers, {noremap = true})
 vim.keymap.set("n", "<Leader>fj", ts_builtin.jumplist, {noremap = true})
@@ -118,8 +124,16 @@ vim.keymap.set("n", "<leader>fr", ts_builtin.lsp_references, { noremap = true, s
 vim.keymap.set("n", "<leader>fS", ts_builtin.lsp_workspace_symbols, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>fs", ts_builtin.lsp_document_symbols, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>fd", ts_builtin.lsp_definitions, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>fe", ts_builtin.diagnostics, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ft", ts_builtin.treesitter, { noremap = true, silent = true })
 
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    vim.diagnostic.open_float(nil, { scope = "line", focusable = false })
+  end,
+})
+
+-- vim.g.clipboard = 'osc52'
 vim.g.clipboard = {
       name = 'OSC 52',
       copy = {
