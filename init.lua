@@ -20,35 +20,23 @@ o.shiftwidth = 4
 o.autoindent = true
 o.textwidth = 88
 o.hlsearch = true
-o.grepprg = "git grep -n --recurse-submodules $*"
+o.grepprg = "git grep -n --column --recurse-submodules $*"
 o.diffopt = "filler,vertical"
 
-vim.g.python3_host_prog = "~/.venvs/nvim/bin/python"
+vim.g.python3_host_prog = "/home/mthyoung/.pyenv/versions/nvim/bin/python"
 
 vim.g.airline_powerline_fonts = 1
 
 vim.g.mapleader = ' '
 
-vim.api.nvim_set_keymap("n", "<F2>", ":NERDTreeToggle<CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<F2>", ":NvimTreeToggle<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<F8>", ":TagbarToggle<CR>", {noremap = true})
 
 vim.api.nvim_set_keymap("n", "<Leader>fa", ":grep! \"\\b<C-R><C-W>\\b\"<CR>:copen<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<Leader>nn", ":cnext<CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<Leader>nN", ":cprev<CR>", {noremap = true})
 
-vim.cmd("au BufNewFile,BufRead *Jenkinsfile* setf groovy")
-
 require("config.lazy")
-
-require'nvim-treesitter.configs'.setup {
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    indent = {
-        enable = false,
-    },
-}
 
 vim.api.nvim_command('autocmd FileType qf wincmd J')
 vim.api.nvim_command('autocmd FileType gitcommit setlocal spell')
@@ -57,91 +45,5 @@ vim.api.nvim_command('autocmd FileType gitcommit setlocal spell')
 -- vim.api.nvim_command('autocmd BufWritePre *.py silent! execute \':Black\'')
 
 
---- Language server config
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-
-local on_lsp_attach = function(client, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-    local bufopts = { noremap=true, silent=true, buffer=bufnr}
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-    vim.keymap.set('n', '<Leader>gt', vim.lsp.buf.type_definition, bufopts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.rename, bufopts)
-    vim.keymap.set('n', 'fm', vim.lsp.buf.format, bufopts)
-    vim.keymap.set('n', 'J', vim.lsp.buf.completion, bufopts)
-    vim.keymap.set('n', '<leader>w', function()
-
-    local params = vim.lsp.util.make_formatting_params({})
-    local handler = function(err, result)
-      if not result then return end
-
-      vim.lsp.util.apply_text_edits(result, bufnr, client.offset_encoding)
-      vim.cmd('write')
-    end
-
-    client.request('textDocument/formatting', params, handler, bufnr)
-  end, {buffer = bufnr})
-end
-
-local lsp_flags = {
-    debounce_text_changes = 150,
-}
-
-local nvim_lsp = require'lspconfig'
--- /workplace/mthyoung/selfie-cam-lru/tmp/KuiperEAR-lep-release-2.23613.0/lep-sdk/sysroots/x86_64-lep-linux/usr/bin/aarch64-lep-linux/aarch64-lep-linux-g++
-require'lspconfig'.clangd.setup{
-    cmd = {"brazil-runtime-exec", "x86_64-unknown-linux-gnu-clangd", "--log=verbose", "--background-index", "--query-driver=/workplace/mthyoung/**/*-linux-*"},
-    on_attach = on_lsp_attach,
-    flags = lsp_flags,
-    --- disable proto, because clangd suxxxxx at it
-    filetypes = {"c",  "cc", "cpp", "objc", "objcpp", "cuda"},
-    root_dir = nvim_lsp.util.root_pattern('Config'),
-}
-
-require'lspconfig'.pyright.setup{
-    cmd = {home .. "/.venvs/nvim/bin/pyright-langserver", "--stdio"},
-    on_attach = on_lsp_attach,
-    flags = lsp_flags,
-}
-
-require('telescope').setup{
-    defaults = {
-        path_display={"smart"}
-    }
-}
-
--- Telescope finder bindings
-local ts_builtin = require('telescope.builtin')
-vim.keymap.set("n", "<Leader>lf", ts_builtin.git_files, {noremap = true})
-vim.keymap.set("n", "<Leader>fz", ts_builtin.spell_suggest, {noremap = true})
-vim.keymap.set("n", "<Leader>fb", ts_builtin.buffers, {noremap = true})
-vim.keymap.set("n", "<Leader>fj", ts_builtin.jumplist, {noremap = true})
-vim.keymap.set("n", "<Leader>fr", ts_builtin.lsp_references, {noremap = true})
-vim.keymap.set("n", "<leader>fr", ts_builtin.lsp_references, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>fS", ts_builtin.lsp_workspace_symbols, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>fs", ts_builtin.lsp_document_symbols, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>fd", ts_builtin.lsp_definitions, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>fe", ts_builtin.diagnostics, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>ft", ts_builtin.treesitter, { noremap = true, silent = true })
-
-vim.api.nvim_create_autocmd("CursorHold", {
-  callback = function()
-    vim.diagnostic.open_float(nil, { scope = "line", focusable = false })
-  end,
-})
-
--- vim.g.clipboard = 'osc52'
-vim.g.clipboard = {
-      name = 'OSC 52',
-      copy = {
-        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-      },
-      paste = {
-        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-      },
-    }
+require("config.lsp")
+require("config.telescope")

@@ -1,7 +1,18 @@
 return {
     { "tpope/vim-fugitive" },
-    { "scrooloose/nerdtree" },
-
+    --
+    {
+      "nvim-tree/nvim-tree.lua",
+      version = "*",
+      lazy = false,
+      dependencies = {
+        "nvim-tree/nvim-web-devicons",
+      },
+      config = function()
+        require("nvim-tree").setup {}
+      end,
+    },
+    --
     { "vim-airline/vim-airline" },
     { "vim-airline/vim-airline-themes" },
     { "airblade/vim-gitgutter" },
@@ -18,7 +29,7 @@ return {
     { 
         "nvim-treesitter/nvim-treesitter",
         config = function () 
-          local configs = require("nvim-treesitter.configs")
+          local configs = require("nvim-treesitter.config")
           configs.setup({
             ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "yaml", "python"},
             sync_install = false,
@@ -36,7 +47,7 @@ return {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build"
     },
-
+    --
     -- Python
     { "psf/black", branch = "stable" },
     { "Glench/Vim-Jinja2-Syntax" },
