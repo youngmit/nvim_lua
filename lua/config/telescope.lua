@@ -17,4 +17,5 @@ vim.keymap.set("n", "<leader>fs", ts_builtin.lsp_document_symbols, { noremap = t
 vim.keymap.set("n", "<leader>fd", ts_builtin.lsp_definitions, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>fe", ts_builtin.diagnostics, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ft", ts_builtin.treesitter, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>fg", ts_builtin.live_grep, { noremap = true, silent = true })
 

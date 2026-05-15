@@ -38,15 +38,25 @@ local lsp_flags = {
     debounce_text_changes = 150,
 }
 
--- /workplace/mthyoung/selfie-cam-lru/tmp/KuiperEAR-lep-release-2.23613.0/lep-sdk/sysroots/x86_64-lep-linux/usr/bin/aarch64-lep-linux/aarch64-lep-linux-g++
-vim.lsp.config("clangd", {
-    cmd = {"brazil-runtime-exec", "x86_64-unknown-linux-gnu-clangd", "--background-index", "--query-driver=/workplace/mthyoung/**/*-linux-*"},
-    on_attach = on_lsp_attach,
-    flags = lsp_flags,
-    --- disable proto, because clangd suxxxxx at it
-    filetypes = {"c",  "cc", "cpp", "objc", "objcpp", "cuda"},
-    root_markers = {'Config'},
-})
+local in_brazil = vim.fn.executable("brazil-runtime-exec") == 1
+    and vim.fn.findfile("Config", vim.fn.getcwd() .. ";") ~= ""
+
+if in_brazil then
+    vim.lsp.config("clangd", {
+        cmd = {"brazil-runtime-exec", "x86_64-unknown-linux-gnu-clangd", "--background-index", "--query-driver=" .. home .. "/**/*-linux-*"},
+        on_attach = on_lsp_attach,
+        flags = lsp_flags,
+        filetypes = {"c", "cc", "cpp", "objc", "objcpp", "cuda"},
+        root_markers = {'Config'},
+    })
+else
+    vim.lsp.config("clangd", {
+        cmd = {"clangd", "--background-index"},
+        on_attach = on_lsp_attach,
+        flags = lsp_flags,
+        filetypes = {"c", "cc", "cpp", "objc", "objcpp", "cuda"},
+    })
+end
 
 vim.lsp.config("pyright", {
     cmd = {home .. "/.venvs/nvim/bin/pyright-langserver", "--stdio"},

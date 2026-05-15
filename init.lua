@@ -23,9 +23,10 @@ o.hlsearch = true
 o.grepprg = "git grep -n --column --recurse-submodules $*"
 o.diffopt = "filler,vertical"
 
-vim.g.python3_host_prog = "/home/mthyoung/.pyenv/versions/nvim/bin/python"
+vim.g.python3_host_prog = os.getenv("HOME") .. "/.pyenv/versions/neovim/bin/python"
 
 vim.g.airline_powerline_fonts = 1
+vim.g.airline_section_y = '%{v:lua.vim.lsp.status()}'
 
 vim.g.mapleader = ' '
 
