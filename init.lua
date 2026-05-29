@@ -48,3 +48,22 @@ vim.api.nvim_command('autocmd FileType gitcommit setlocal spell')
 
 require("config.lsp")
 require("config.telescope")
+
+-- Detect tab-indented files and disable expandtab for them
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local lines = vim.api.nvim_buf_get_lines(0, 0, math.min(100, vim.api.nvim_buf_line_count(0)), false)
+    local tabs, spaces = 0, 0
+    for _, line in ipairs(lines) do
+      if line:match("^\t") then tabs = tabs + 1
+      elseif line:match("^    ") then spaces = spaces + 1
+      end
+    end
+    if tabs > spaces then
+      vim.bo.expandtab = false
+      vim.bo.tabstop = 4
+      vim.bo.softtabstop = 4
+      vim.bo.shiftwidth = 4
+    end
+  end,
+})
